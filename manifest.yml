@@ -4,17 +4,26 @@ instances: 1
 applications:
 - name: album-service
   path: applications/album-service/build/libs/album-service-1.1.0-SNAPSHOT.jar
+  random-route: true
   services:
   - album-database
   - moviefun-s3
+  - movie-fun-sso
+  env:
+      GRANT_TYPE: client_credentials
 - name: movie-service
   path: applications/movie-service/build/libs/movie-service-1.1.0-SNAPSHOT.jar
   services:
   - movie-database
+  - movie-fun-sso
+  random-route: true
+  env:
+      GRANT_TYPE: client_credentials
 - name: movie-fun-app
   path: applications/movie-fun-app/build/libs/movie-fun-app-1.1.0-SNAPSHOT.war
   services:
   - moviefun-s3
+  - movie-fun-sso
+  random-route: true
   env:
-    ALBUMS_URL: http://album-service.cfapps-02.haas-66.pez.pivotal.io/albums
-    MOVIES_URL: http://movie-service.cfapps-02.haas-66.pez.pivotal.io/movies
+      GRANT_TYPE: authorization_code
